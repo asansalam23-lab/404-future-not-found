@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 FUTURE NOT FOUND</title>
+  <style>
+    :root {
+      --bg: #050505;
+      --paper: #f2efe6;
+      --ink: #111;
+      --acid: #b6ff00;
+      --pink: #ff2ebd;
+      --cyan: #00e5ff;
+      --red: #ff2b2b;
+      --orange: #ff8a00;
+      --violet: #7c4dff;
+      --line: 3px solid #111;
+      --shadow: 8px 8px 0 #000;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--paper);
+      font-family: "Courier New", monospace;
+      cursor: crosshair;
+      overflow-x: hidden;
+    }
+
+    body.hot {
+      animation: heatPulse 0.35s infinite alternate;
+    }
+
+    @keyframes heatPulse {
+      from { filter: saturate(1) contrast(1); }
+      to { filter: saturate(1.35) contrast(1.15); }
+    }
+
+    @keyframes blink { to { visibility: hidden; } }
+    @keyframes shake {
+      0% { transform: translate(0,0); }
+      25% { transform: translate(2px,-1px); }
+      50% { transform: translate(-2px,2px); }
+      75% { transform: translate(1px,1px); }
+      100% { transform: translate(0,0); }
+    }
+    @keyframes scan { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
+    @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+    @keyframes ghostFloat { 0%,100% { transform: translateY(0); opacity: .55; } 50% { transform: translateY(-12px); opacity: .95; } }
+
+    .scanlines::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      background: repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0px, rgba(255,255,255,.04) 1px, transparent 1px, transparent 4px);
+      mix-blend-mode: overlay;
+    }
+
+    .desktop {
+      min-height: 100vh;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,46,189,.18), transparent 26%),
+        radial-gradient(circle at 80% 30%, rgba(0,229,255,.13), transparent 22%),
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+        #050505;
+      background-size: auto, auto, 28px 28px, 28px 28px, auto;
+      position: relative;
+    }
+
+    .window {
+      border: 3px solid #111;
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+    }
+
+    .chrome {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 10px 12px;
+      background: linear-gradient(90deg, #d8d8d8, #ffffff);
+      border-bottom: var(--line);
+      color: #111;
+      font-weight: 900;
+      flex-wrap: wrap;
+    }
+
+    .dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #111; }
+    .red { background: #ff5f57; } .yellow { background: #ffbd2e; } .green { background: #28c840; }
+
+    .main {
+      width: min(1240px, 100%);
+      margin: 0 auto;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 12px;
+      background: #fff;
+      border-bottom: var(--line);
+    }
+
+    button, .btn {
+      border: var(--line);
+      background: #fff;
+      color: #111;
+      font-family: inherit;
+      font-weight: 900;
+      padding: 10px 12px;
+      box-shadow: 4px 4px 0 #111;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    button:hover, .btn:hover { transform: translate(1px,1px); box-shadow: 3px 3px 0 #111; }
+    button.active { background: var(--acid); }
+
+    .content { padding: 18px; min-height: 78vh; }
+
+    h1, h2, h3 {
+      text-transform: uppercase;
+      letter-spacing: -.05em;
+      line-height: .95;
+      margin: 0 0 14px;
+    }
+
+    h1 { font-size: clamp(3rem, 8vw, 7rem); }
+    h2 { font-size: clamp(1.8rem, 4vw, 3.2rem); }
+    h3 { font-size: 1.25rem; }
+
+    p { line-height: 1.45; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 16px;
+    }
+
+    .panel {
+      border: var(--line);
+      background: #fffdf4;
+      color: #111;
+      padding: 16px;
+      box-shadow: 6px 6px 0 rgba(0,0,0,.25);
+      position: relative;
+    }
+
+    .black-panel {
+      background: #050505;
+      color: #d7ff00;
+      border-color: #d7ff00;
+    }
+
+    .warning {
+      background: #000;
+      color: #00ff66;
+      border: 3px dashed #00ff66;
+      padding: 12px;
+      font-weight: 900;
+    }
+
+    .blink { animation: blink .65s steps(2,start) infinite; }
+    .shake { animation: shake .22s linear 3; }
+
+    .marquee-wrap {
+      border: var(--line);
+      background: #fff;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 10px 0;
+      margin: 14px 0;
+    }
+
+    .marquee {
+      display: inline-block;
+      padding-left: 100%;
+      animation: scroll 16s linear infinite;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .topic-card {
+      min-height: 240px;
+      cursor: pointer;
+      transition: transform .2s ease;
+      overflow: hidden;
+    }
+
+    .topic-card:hover { transform: rotate(-1deg) scale(1.015); }
+
+    .virus { background: linear-gradient(135deg, #ff2ebd, #111 58%, #b6ff00); color: #fff; }
+    .ghost { background: linear-gradient(135deg, #111, #333, #e8e8ff); color: #fff; }
+    .poor { background: linear-gradient(135deg, #dedede, #707070); color: #111; filter: contrast(1.3); }
+    .hotmedia { background: linear-gradient(135deg, #ff2b2b, #ff8a00, #111); color: #fff; }
+    .loop { background: linear-gradient(135deg, #7c4dff, #00e5ff, #111); color: #fff; }
+
+    .ascii {
+      white-space: pre-wrap;
+      background: #000;
+      color: #00ff66;
+      padding: 12px;
+      border: 2px solid #00ff66;
+      font-size: .85rem;
+      overflow: auto;
+    }
+
+    .meter {
+      height: 32px;
+      background: #fff;
+      border: var(--line);
+      overflow: hidden;
+      margin: 8px 0;
+    }
+
+    .meter > div { height: 100%; transition: width .3s ease; }
+    .heatbar { background: linear-gradient(90deg, #ffeb3b, #ff5722, #ff0000); }
+    .loopbar { background: linear-gradient(90deg, #7c4dff, #00e5ff); }
+
+    .poor-img {
+      width: 100%;
+      height: 220px;
+      border: var(--line);
+      background:
+        linear-gradient(90deg, rgba(255,0,0,.7), rgba(0,255,255,.6)),
+        repeating-linear-gradient(45deg, #111 0 8px, #777 8px 16px, #ddd 16px 24px);
+      image-rendering: pixelated;
+      filter: contrast(1.8) saturate(.55) blur(1px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poor-img::after {
+      content: "LOW_RES_IMAGE_004.jpg / copied / compressed / forwarded / downloaded";
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      background: #000;
+      color: #fff;
+      padding: 8px;
+      font-size: .8rem;
+    }
+
+    .ghost-word {
+      font-size: clamp(2rem, 7vw, 6rem);
+      color: rgba(255,255,255,.55);
+      text-shadow: 0 0 18px rgba(180,180,255,.7);
+      animation: ghostFloat 3s ease-in-out infinite;
+    }
+
+    .chat {
+      background: #fff;
+      color: #111;
+      border: var(--line);
+      padding: 12px;
+      max-height: 420px;
+      overflow: auto;
+    }
+
+    .bubble {
+      border: 2px solid #111;
+      padding: 9px;
+      margin: 8px 0;
+      background: #eaf5ff;
+      max-width: 85%;
+    }
+
+    .bubble.me { margin-left: auto; background: #d6ffd6; }
+
+    .popup {
+      position: fixed;
+      width: 280px;
+      z-index: 50;
+      background: #fffdf4;
+      color: #111;
+      border: var(--line);
+      box-shadow: 6px 6px 0 #000;
+      animation: shake .22s linear 2;
+    }
+
+    .popup-head {
+      background: var(--acid);
+      border-bottom: var(--line);
+      padding: 8px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .popup-body { padding: 12px; }
+
+    .footer {
+      opacity: .75;
+      text-align: center;
+      font-size: .85rem;
+      padding: 18px 0 8px;
+    }
+
+    .small { font-size: .88rem; opacity: .82; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="scanlines">
+  <div class="desktop" id="desktop">
+    <div class="main window">
+      <div class="chrome">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span>404_FUTURE_NOT_FOUND.webzine</span>
+        <span class="blink">// connection unstable</span>
+      </div>
+      <div class="nav" id="nav"></div>
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      page: 'home',
+      infection: 0,
+      degradation: 1,
+      heat: 22,
+      loop: 0,
+      clicks: 0,
+      popups: []
+    };
+
+    const pages = [
+      { id: 'home', label: 'Home' },
+      { id: 'cyberfeminism', label: 'Cyberfeminist Virus' },
+      { id: 'hauntology', label: 'Hauntology' },
+      { id: 'poorimage', label: 'Poor Image' },
+      { id: 'hotmedia', label: 'Hot Media' },
+      { id: 'badinfinity', label: 'Bad Infinity' },
+      { id: 'bibliography', label: 'References' }
+    ];
+
+    const refs = [
+      'VNS Matrix — Cyberfeminist Manifesto for the 21st Century',
+      'Mark Fisher — The Slow Cancellation of the Future',
+      'Mark Fisher — Terminator vs Avatar',
+      'Hito Steyerl — In Defense of the Poor Image / Los condenados de la pantalla',
+      'Hito Steyerl — Medios calientes: extracción y entropía',
+      'Anastasia Pavic — 4ever connected',
+      'Course sessions: Creación en Internet — Trabajo final'
+    ];
+
+    function navHTML() {
+      return pages.map(p => `<button class="${state.page === p.id ? 'active' : ''}" onclick="go('${p.id}')">${p.label}</button>`).join('');
+    }
+
+    function layout(title, body, cls = '') {
+      return `<section class="${cls}">${body}<div class="footer">404 FUTURE NOT FOUND — experimental webzine / internet as medium / user as infected reader</div></section>`;
+    }
+
+    function home() {
+      return layout('home', `
+        <div class="hero">
+          <div class="panel black-panel">
+            <div class="ascii">SYSTEM MESSAGE:\n\nThe internet promised openness, community, memory and future.\nThis webzine opens the corrupted folder of that promise.\n\n> five concepts loaded\n> future unavailable\n> user interaction required</div>
+            <h1>404 FUTURE NOT FOUND</h1>
+            <p><strong>A haunted webzine about the Internet as virus, archive, poor image, heat machine, and infinite care loop.</strong></p>
+            <div class="warning">
+              WARNING: This website may contain feminist malware, cancelled futures, degraded images, overheating media, and emotional loops that never end.
+            </div>
+            <div class="marquee-wrap"><div class="marquee">cyberfeminism / hauntology / poor image / hot media / bad infinity / the future is buffering / the image survived but lost quality /</div></div>
+            <button onclick="infect()">Infect System</button>
+            <button onclick="go('poorimage')">Load Poor Image</button>
+            <button onclick="go('badinfinity')">Enter Loop</button>
+          </div>
+          <div class="panel">
+            <h2>Project thesis</h2>
+            <p>This project treats the Internet not only as a subject, but as a medium with its own unstable logic.</p>
+            <p>Each section transforms a course concept into an interface behavior: the virus infects, the future ghosts, the image degrades, the media heats, and connection loops endlessly.</p>
+            <h3>Course topics included</h3>
+            <ul>
+              <li>Ciberfeminismo — VNS Matrix</li>
+              <li>Hauntología — Mark Fisher</li>
+              <li>La imagen pobre — Hito Steyerl</li>
+              <li>Medios calientes — extraction and entropy</li>
+              <li>Mala infinitud — care loop / 4ever connected</li>
+            </ul>
+            <p class="small">The site should not feel like a clean presentation. It should feel like the theory has infected the browser.</p>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="panel topic-card virus" onclick="go('cyberfeminism')"><h2>01 Virus</h2><p>Cyberfeminism as disorder, infection, body-machine sabotage.</p></div>
+          <div class="panel topic-card ghost" onclick="go('hauntology')"><h2>02 Ghost</h2><p>The cancelled future returns as nostalgia, archive, dead link.</p></div>
+          <div class="panel topic-card poor" onclick="go('poorimage')"><h2>03 Poor Image</h2><p>Low resolution, high circulation, proletarian visual culture.</p></div>
+          <div class="panel topic-card hotmedia" onclick="go('hotmedia')"><h2>04 Heat</h2><p>Digital media consumes energy, minerals, labor, and atmosphere.</p></div>
+          <div class="panel topic-card loop" onclick="go('badinfinity')"><h2>05 Loop</h2><p>Care, notification, connection, exhaustion: forever online.</p></div>
+        </div>
+      `);
+    }
+
+    function cyberfeminism() {
+      return layout('cyberfeminism', `
+        <div class="hero">
+          <div class="panel virus">
+            <h1>Cyberfeminist Virus</h1>
+            <p><strong>Concept:</strong> Cyberfeminism appears here as a disruptive digital force — a virus of disorder that attacks rigid technological systems and the illusion that technology is neutral.</p>
+            <p>Inspired by VNS Matrix, this section treats infection as resistance. The virus is not simple destruction; it is sabotage, corruption, interference. It breaks the clean surface of digital control and reveals the anxiety hidden beneath systems that pretend to function perfectly.</p>
+            <p><em>My interpretation:</em> Early internet culture imagined cyberspace as a place of liberation, experimentation, and rebellion. Today, much of the internet feels standardized, optimized, and controlled by platforms. This section imagines cyberfeminism as a return of digital chaos — not to destroy the machine completely, but to interrupt it and expose its hidden structures.</p>
+            <p>“The system fears disorder because disorder reveals that the system was never natural.”</p>
+            <button onclick="infect()">Run VNS_MATRIX.exe</button>
+            <button onclick="spawnPopup('virus')">Open infected manifesto</button>
+          </div>
+          <div class="panel">
+            <h2>Text fragments</h2>
+            <p>“The disorder is not outside the machine. The disorder is the machine becoming visible.”</p>
+            <p>“To infect the system is to refuse the fantasy of neutral technology.”</p>
+            <div class="meter"><div style="width:${Math.min(100, state.infection)}%; background:linear-gradient(90deg,var(--pink),var(--acid));"></div></div>
+            <p><strong>Infection level:</strong> ${state.infection}%</p>
+          </div>
+        </div>
+      `);
+    }
+
+    function hauntology() {
+      return layout('hauntology', `
+        <div class="hero">
+          <div class="panel ghost">
+            <h1>Hauntology</h1>
+            <div class="ghost-word">FUTURE?</div>
+            <p><strong>Concept:</strong> Following Mark Fisher, the future is not destroyed in a dramatic collapse. Instead, it slowly disappears through repetition, nostalgia, remakes, and endless recycling of the past.</p>
+            <p>This section performs that condition: every attempt to access the future returns an archive, an abandoned interface, or a memory disguised as something new.</p>
+            <p><em>My interpretation:</em> The internet once felt futuristic. Early digital culture imagined strange new worlds, radical futures, and technological transformation. But contemporary online culture often feels trapped inside loops of nostalgia. We revisit old aesthetics, old franchises, old operating systems, and old dreams because imagining a genuinely different future has become increasingly difficult.</p>
+            <p>Hauntology is not only nostalgia. It is the ghost of unrealized possibilities — futures that were once promised but never arrived.</p>
+            <p>“The future keeps buffering.”</p>
+            <button onclick="futureButton()">Open Future</button>
+            <button onclick="spawnPopup('future')">Restore lost tomorrow</button>
+          </div>
+          <div class="panel">
+            <h2>Archive Log</h2>
+            <div class="ascii">1999: future loading...\n2008: future postponed...\n2016: reboot nostalgia...\n2024: future unavailable...\nNOW: the ghost remains online.</div>
+            <p>Hauntology is not simply nostalgia. It is the feeling that other futures were once possible, but became inaccessible.</p>
+          </div>
+        </div>
+      `);
+    }
+
+    function poorimage() {
+      const blur = Math.min(8, state.degradation);
+      return layout('poorimage', `
+        <div class="hero">
+          <div class="panel poor">
+            <h1>The Poor Image</h1>
+            <p><strong>Concept:</strong> Following Hito Steyerl, the poor image is compressed, copied, degraded, reposted, and endlessly circulated online. It loses visual quality but gains movement, accessibility, and social life.</p>
+            <p>In this section, every interaction damages the image further. The image becomes visually worse but culturally more active.</p>
+            <p><em>My interpretation:</em> Internet culture transformed the value of images. Traditional art valued clarity, originality, and preservation. Online culture values circulation. A blurry screenshot or compressed meme can become more influential than a high-resolution artwork because it travels faster and reaches more people.</p>
+            <p>The poor image survives because it moves. Its degradation becomes evidence of circulation, copying, downloading, and collective participation.</p>
+            <p>“The image survived compression but not innocence.”</p>
+            <button onclick="degradeImage()">Compress Again</button>
+            <button onclick="spawnPopup('poor')">Forward image</button>
+          </div>
+          <div class="panel">
+            <div class="poor-img" style="filter: contrast(${1.2 + state.degradation / 5}) saturate(.55) blur(${blur / 3}px); transform: scale(${1 + state.degradation / 70});"></div>
+            <p><strong>Compression generation:</strong> ${state.degradation}</p>
+            <p>“The poor image is not poor because it lacks value. It is poor because it has travelled.”</p>
+          </div>
+        </div>
+      `);
+    }
+
+    function hotmedia() {
+      const heat = Math.min(100, state.heat);
+      document.body.classList.toggle('hot', heat > 70);
+      return layout('hotmedia', `
+        <div class="hero">
+          <div class="panel hotmedia">
+            <h1>Hot Media</h1>
+            <p><strong>Concept:</strong> Digital media often appears invisible and immaterial, but it depends on extraction, electricity, servers, cables, labor, minerals, and planetary heat. The cloud is physical.</p>
+            <p>Each interaction raises the temperature of the interface. The website transforms the metaphor of hot media into a visible browser condition.</p>
+            <p><em>My interpretation:</em> We usually experience the internet as something abstract and weightless, but every click activates infrastructure somewhere in the physical world. Behind every image and stream there are data centers, extraction industries, energy consumption, and environmental consequences.</p>
+            <p>This section tries to reveal the hidden physical body of digital culture: a network powered not only by information, but by heat, exhaustion, and resource consumption.</p>
+            <p>“Even the cloud casts a shadow.”</p>
+            <button onclick="raiseHeat()">Render More</button>
+            <button onclick="coolDown()">Cool Down</button>
+          </div>
+          <div class="panel">
+            <h2>CPU / Planet Temperature</h2>
+            <div class="meter"><div class="heatbar" style="width:${heat}%;"></div></div>
+            <p><strong>Heat:</strong> ${heat}°</p>
+            <p>${heat > 70 ? 'WARNING: media system overheating. Meaning is now thermodynamic.' : 'System warm but still pretending to be immaterial.'}</p>
+            <div class="ascii">resources extracted:\n- attention\n- lithium\n- time\n- electricity\n- sleep\n- emotional bandwidth</div>
+          </div>
+        </div>
+      `);
+    }
+
+    function badinfinity() {
+      const messages = [
+        ['system', 'Are you still connected?'],
+        ['me', 'Yes.'],
+        ['system', 'Please confirm again.'],
+        ['me', 'I am here.'],
+        ['system', 'Your care has been registered.'],
+        ['system', 'New notification.'],
+        ['system', 'New notification.'],
+        ['me', 'Can I leave?'],
+        ['system', 'Connection is care. Care is connection.']
+      ];
+      const visible = messages.slice(0, Math.min(messages.length, 3 + state.loop));
+      return layout('badinfinity', `
+        <div class="hero">
+          <div class="panel loop">
+            <h1>Bad Infinity</h1>
+            <p><strong>Concept:</strong> Bad infinity describes repetition without transformation — a loop that continues endlessly without truly progressing. Online life often produces this sensation through scrolling, notifications, messaging, refreshing, and permanent connection.</p>
+            <p>Inspired by Anastasia Pavic’s <em>4ever connected</em> and Mark Fisher’s writings on exhaustion, this section turns digital connection into a soft emotional trap.</p>
+            <p><em>My interpretation:</em> The internet promises connection and care, but it also creates pressure to remain permanently available. We answer messages, refresh feeds, maintain profiles, respond to notifications, and continue scrolling long after meaning disappears.</p>
+            <p>The loop becomes difficult to escape because participation itself becomes habitual. We remain online not because we are fulfilled, but because disconnection feels impossible.</p>
+            <p>“You are still connected.”</p>
+            <button onclick="continueLoop()">Reply Again</button>
+            <button onclick="spawnPopup('loop')">Reconnect Forever</button>
+          </div>
+          <div class="panel">
+            <h2>Care Loop</h2>
+            <div class="meter"><div class="loopbar" style="width:${Math.min(100, state.loop * 14)}%;"></div></div>
+            <div class="chat">
+              ${visible.map(m => `<div class="bubble ${m[0] === 'me' ? 'me' : ''}">${m[1]}</div>`).join('')}
+              <div class="bubble">typing<span class="blink">...</span></div>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+
+    function bibliography() {
+      return layout('bibliography', `
+        <div class="panel">
+          <h1>References</h1>
+          <p>This webzine uses class concepts and fragments inspired by the following texts and sessions.</p>
+          <ul>
+            ${refs.map(r => `<li>${r}</li>`).join('')}
+          </ul>
+          <h2>Project Statement</h2>
+          <p><strong>404 FUTURE NOT FOUND</strong> is an experimental webzine that translates theory into browser behavior. Instead of simply explaining cyberfeminism, hauntology, the poor image, hot media and bad infinity, it makes the user experience them through infection, ghosting, degradation, heat and repetition.</p>
+        </div>
+      `);
+    }
+
+    function render() {
+      document.getElementById('nav').innerHTML = navHTML();
+      let html = '';
+      if (state.page === 'home') html = home();
+      if (state.page === 'cyberfeminism') html = cyberfeminism();
+      if (state.page === 'hauntology') html = hauntology();
+      if (state.page === 'poorimage') html = poorimage();
+      if (state.page === 'hotmedia') html = hotmedia();
+      if (state.page === 'badinfinity') html = badinfinity();
+      if (state.page === 'bibliography') html = bibliography();
+      document.getElementById('content').innerHTML = html;
+    }
+
+    function go(page) {
+      state.page = page;
+      state.clicks++;
+      state.heat += 3;
+      render();
+      beep(500 + Math.random() * 200, .05);
+    }
+
+    function infect() {
+      state.infection = Math.min(100, state.infection + 25);
+      document.querySelector('.main').classList.add('shake');
+      setTimeout(() => document.querySelector('.main').classList.remove('shake'), 400);
+      spawnPopup('virus');
+      render();
+    }
+
+    function futureButton() {
+      spawnPopup('future');
+      state.heat += 5;
+      render();
+    }
+
+    function degradeImage() {
+      state.degradation += 1;
+      state.heat += 4;
+      render();
+      beep(220, .08, 'sawtooth');
+    }
+
+    function raiseHeat() {
+      state.heat = Math.min(100, state.heat + 18);
+      render();
+      if (state.heat >= 85) spawnPopup('heat');
+    }
+
+    function coolDown() {
+      state.heat = Math.max(20, state.heat - 20);
+      render();
+    }
+
+    function continueLoop() {
+      state.loop = Math.min(8, state.loop + 1);
+      state.heat += 2;
+      render();
+    }
+
+    function spawnPopup(type) {
+      const texts = {
+        virus: ['VNS_MATRIX.exe', 'Error: gender binary corrupted. The system cannot restore patriarchal order.'],
+        future: ['FUTURE_ARCHIVE.zip', 'Download failed. The future exists only as a ghost of a promise.'],
+        poor: ['LOW_RES_IMAGE_004.jpg', 'Copied again. Quality decreased. Circulation increased.'],
+        heat: ['THERMAL WARNING', 'Digital culture is overheating. The cloud has a temperature.'],
+        loop: ['4EVER_CONNECTED', 'You have one new obligation. You are still online.']
+      };
+      const data = texts[type] || texts.future;
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.style.left = (40 + Math.random() * Math.max(100, window.innerWidth - 340)) + 'px';
+      popup.style.top = (60 + Math.random() * Math.max(100, window.innerHeight - 260)) + 'px';
+      popup.innerHTML = `<div class="popup-head">${data[0]}</div><div class="popup-body"><p>${data[1]}</p><button onclick="this.closest('.popup').remove()">close</button></div>`;
+      document.getElementById('desktop').appendChild(popup);
+      setTimeout(() => { if (popup.parentNode) popup.remove(); }, 7000);
+    }
+
+    let audioCtx;
+    function beep(freq = 440, duration = .06, type = 'square') {
+      try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.value = freq;
+        osc.type = type;
+        gain.gain.value = .025;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (err) {}
+    }
+
+    document.addEventListener('click', e => {
+      const words = ['future?', 'virus', 'poor image', 'heat', 'care loop', 'archive', 'extract', 'still online'];
+      const div = document.createElement('div');
+      div.textContent = words[Math.floor(Math.random() * words.length)];
+      div.style.position = 'fixed';
+      div.style.left = e.clientX + 'px';
+      div.style.top = e.clientY + 'px';
+      div.style.color = ['#b6ff00', '#ff2ebd', '#00e5ff', '#ff8a00'][Math.floor(Math.random()*4)];
+      div.style.fontWeight = '900';
+      div.style.pointerEvents = 'none';
+      div.style.zIndex = '1000';
+      div.style.animation = 'ghostFloat 1s ease forwards';
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 1000);
+    });
+
+    render();
+  </script>
+</body>
+</html>
